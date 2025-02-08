@@ -17,17 +17,27 @@ class OpenAiTestController extends Controller
     {
         try {
             
-            $response = $this->client->post('https://api.openai.com/v1/chat/completions', [
-                'json' => [
-                    'model' => 'gpt-3.5-turbo',  // Use a new model
-                    'messages' => [
-                        ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-                        ['role' => 'user', 'content' => 'Please summarize the following log: ']
-                    ],
-                ],
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
-                ],
+            // $response = $this->client->post('https://api.openai.com/v1/chat/completions', [
+            //     'json' => [
+            //         'model' => 'gpt-3.5-turbo',  // Use a new model
+            //         'messages' => [
+            //             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            //             ['role' => 'user', 'content' => 'Please summarize the following log: ']
+            //         ],
+            //     ],
+            //     'headers' => [
+            //         'Authorization' => 'Bearer ' . $this->apiKey,
+            //     ],
+            // ]);
+            $logData = "php data";
+            
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
+                'Content-Type'  => 'application/json'
+            ])->post('https://api.openai.com/v1/chat/completions', [
+                'model' => 'gpt-4',
+                'messages' => [['role' => 'user', 'content' => $logData]],
+                'temperature' => 0.7
             ]);
 
             $responseData = json_decode($response->getBody(), true);
